@@ -55,6 +55,8 @@ Per-request oracle (concurrency 40, parent span id verified):
 | platform threads (regression canary), 2000 req | clean, no change |
 | mixed: 64 churning VTs + 800 platform pool-handoff requests on the same two OS threads | 800/800 correct, map empty post-quiesce |
 | TLS downstream, virtual threads, 1000 req | 998/1000 correct, 0 cross-wired |
+| raw TCP (generic-TCP keying), 800 req, virtual threads | 800/800, server_traces empty post-quiesce (34.5% on unpatched baseline) |
+| DNS resolutions on virtual threads | 24/24 parented to their request (31.8% on unpatched baseline) |
 
 Overhead (fix vs baseline, throughput noise floor +/-22.8%): no measurable
 cost on any arm; details and the honest churn worst case in
