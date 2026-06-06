@@ -1,0 +1,15 @@
+# Enricher override: enable the log enricher (YAML-only, no env toggle
+# exists) alongside the text printer. E5_CONFIG must be an ABSOLUTE path
+# (run.sh exports it): compose resolves a relative form against the project
+# dir (../oracle here) and docker would create a phantom root-owned
+# DIRECTORY there, silently breaking OBI's config load.
+services:
+  obi:
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      # traces_ctx_v1 is LIBBPF_PIN_BY_NAME: without bpffs the enricher is
+      # silently disabled ("features depending on pinned maps ... disabled")
+      - /sys/fs/bpf:/sys/fs/bpf
+      - ${E5_CONFIG}:/configs/obi-e5.yml:ro
+    environment:
+      OTEL_EBPF_CONFIG_PATH: /configs/obi-e5.yml

@@ -1,0 +1,23 @@
+================ arm=vtfix (VT=true, OBI=fix) ================
+thread-info: {"virtual":true,"thread_name":"tomcat-handler-1"}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 599, oracle log lines: 601
+  enriched with OWN trace (correct):   0
+  enriched with ANOTHER request trace: 0 []
+  enriched with unknown trace:         0
+  unenriched (no trace_id injected):   599
+  server span without log line:        0
+VERDICT: correct=0.00% wrong-trace=0.00% unenriched=100.00% (of 599)
+================ arm=ptfix (VT=false, OBI=fix) ================
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 600, oracle log lines: 601
+  enriched with OWN trace (correct):   600
+  enriched with ANOTHER request trace: 0 []
+  enriched with unknown trace:         0
+  unenriched (no trace_id injected):   0
+  server span without log line:        0
+VERDICT: correct=100.00% wrong-trace=0.00% unenriched=0.00% (of 600)
+DONE

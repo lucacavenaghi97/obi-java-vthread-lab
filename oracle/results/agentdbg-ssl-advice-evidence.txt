@@ -1,0 +1,13 @@
+app-1  | [Byte Buddy] DISCOVERY io.opentelemetry.obi.java.instrumentations.SSLSocketStreamInst [jdk.internal.loader.ClassLoaders$AppClassLoader@7fb33394, unnamed module @445cfc31, Thread[#53,Attach Listener,9,system], loaded=true]
+app-1  | [Byte Buddy] IGNORE io.opentelemetry.obi.java.instrumentations.SSLSocketStreamInst [jdk.internal.loader.ClassLoaders$AppClassLoader@7fb33394, unnamed module @445cfc31, Thread[#53,Attach Listener,9,system], loaded=true]
+app-1  | [Byte Buddy] COMPLETE io.opentelemetry.obi.java.instrumentations.SSLSocketStreamInst [jdk.internal.loader.ClassLoaders$AppClassLoader@7fb33394, unnamed module @445cfc31, Thread[#53,Attach Listener,9,system], loaded=true]
+app-1  | [SSLSocketStreamInst] OutputStream.write(off,len) intercepted: 110 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] InputStream.read(off,len) intercepted: 145 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] Error in read advice: io/opentelemetry/obi/java/instrumentations/SSLSocketStreamInst
+app-1  | [SSLSocketStreamInst] OutputStream.write(off,len) intercepted: 110 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] InputStream.read(off,len) intercepted: 145 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] Error in read advice: io/opentelemetry/obi/java/instrumentations/SSLSocketStreamInst
+app-1  | [SSLSocketStreamInst] OutputStream.write(off,len) intercepted: 110 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] InputStream.read(off,len) intercepted: 145 bytes, socket SSLSocket[hostname=downstream, port=443, Session(1780748350726|TLS_AES_256_GCM_SHA384)]
+app-1  | [SSLSocketStreamInst] Error in read advice: io/opentelemetry/obi/java/instrumentations/SSLSocketStreamInst
+EVIDENCE: read advice fires (145B response) then NoClassDefFoundError on SSLSocketStreamInst.writeReadPacket (bootstrap visibility); write advice inlines bootstrap-injected classes and works. 10x op=1 SEND / 0x op=2 RECV at BPF level.

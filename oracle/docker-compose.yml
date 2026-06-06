@@ -1,0 +1,57 @@
+# Per-request oracle harness. Same triangle as ../reproducer (app under
+# test, downstream, OBI with text printer), but driving the oracle endpoints
+# and parameterizing the app's JRE. See README.md for the arms.
+name: vt-oracle
+services:
+  app:
+    build:
+      context: ../reproducer/app
+      args:
+        JRE_IMAGE: ${JRE_IMAGE:-eclipse-temurin:21-jre}
+    image: vt-oracle-app
+    ports:
+      - "18080:8080"
+    volumes:
+      - ./tls:/certs:ro
+    environment:
+      SPRING_THREADS_VIRTUAL_ENABLED: "${VT:-false}"
+      # for the mixed arm's custom VT scheduler (JDK-internal field); harmless
+      # in the other arms. Must be the single-token = form: JAVA_TOOL_OPTIONS
+      # splits on whitespace and the JVM rejects a bare --add-opens token.
+      JAVA_TOOL_OPTIONS: "--add-opens=java.base/java.lang=ALL-UNNAMED"
+      # tlss arm only: Tomcat serves HTTPS on 8080 (SSLEngine path in the
+      # java agent). Spring relaxed binding: server.ssl.*
+      SERVER_SSL_ENABLED: "${SSL_SERVER:-false}"
+      SERVER_SSL_KEYSTORE: "file:/certs/app.p12"
+      SERVER_SSL_KEYSTORETYPE: "PKCS12"
+      SERVER_SSL_KEYSTOREPASSWORD: "changeit"
+
+  downstream:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./nginx-echo.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./tls:/etc/nginx/certs:ro
+    expose:
+      - "80"
+      - "443"
+
+  obi:
+    build:
+      context: ${OBI_REPO:?point OBI_REPO at an opentelemetry-ebpf-instrumentation checkout}
+      dockerfile: internal/test/integration/components/obi/Dockerfile-with-javaagent
+    image: hatest-obi-b
+    privileged: true
+    network_mode: host
+    pid: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    environment:
+      OTEL_EBPF_OPEN_PORT: "8080"
+      OTEL_EBPF_TRACE_PRINTER: "text"
+      OTEL_EBPF_BPF_CONTEXT_PROPAGATION: "all"
+      OTEL_EBPF_DISCOVERY_POLL_INTERVAL: "500ms"
+      OTEL_EBPF_LOG_LEVEL: "info"
+      OTEL_EBPF_BPF_DEBUG: "${BPF_DEBUG:-false}"
+    depends_on:
+      app:
+        condition: service_started

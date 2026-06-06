@@ -1,0 +1,34 @@
+================ arm=tlsc21 (VT=true, JRE=eclipse-temurin:21-jre, endpoint=oracle-tls, ssl_server=false) ================
+thread-info: {"thread_name":"tomcat-handler-1","virtual":true}
+waiting 35s for OBI discovery + java agent injection...
+driving 1000 /oracle-tls requests at concurrency 40...
+oracle server spans: 1000
+oracle client spans: 45
+  correctly stitched (same trace AND parent == server span): 26
+  same trace, unexpected parent:                             19
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          955
+VERDICT: 26/1000 = 2.60% correct; misattributed=0 orphaned=0 (1.90% bad)
+================ arm=ptls21 (VT=false, JRE=eclipse-temurin:21-jre, endpoint=oracle-tls, ssl_server=false) ================
+================ arm=tlsc21 (VT=true, JRE=eclipse-temurin:21-jre, endpoint=oracle-tls, ssl_server=false) ================
+  correctly stitched (same trace AND parent == server span): 26
+  same trace, unexpected parent:                             19
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          955
+VERDICT: 26/1000 = 2.60% correct; misattributed=0 orphaned=0 (1.90% bad)
+================ arm=ptls21 (VT=false, JRE=eclipse-temurin:21-jre, endpoint=oracle-tls, ssl_server=false) ================
+  correctly stitched (same trace AND parent == server span): 27
+  same trace, unexpected parent:                             13
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          960
+VERDICT: 27/1000 = 2.70% correct; misattributed=0 orphaned=0 (1.30% bad)
+================ arm=tlss21 (VT=true, JRE=eclipse-temurin:21-jre, endpoint=oracle-tls, ssl_server=true) ================
+  correctly stitched (same trace AND parent == server span): 9
+  same trace, unexpected parent:                             12
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          978
+VERDICT: 9/999 = 0.90% correct; misattributed=0 orphaned=0 (1.20% bad)

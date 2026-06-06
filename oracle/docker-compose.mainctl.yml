@@ -1,0 +1,7 @@
+# Override for control runs against an unpatched OBI build (image
+# obi-main-clean, built from main without the fix; see README for the build
+# command): replaces the fix build so `up` cannot clobber the clean tag.
+services:
+  obi:
+    image: obi-main-clean
+    build: !reset null

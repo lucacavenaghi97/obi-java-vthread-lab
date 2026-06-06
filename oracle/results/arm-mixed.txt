@@ -1,0 +1,19 @@
+thread-info: {"thread_name":"http-nio-8080-exec-2","virtual":false}
+waiting 35s for OBI discovery + java agent injection...
+churn: {"seconds":60,"churning":64}
+--- java_vt_threads DURING churn (expect entries) ---
+[]
+driving 800 /mixed-pt requests under churn...
+load done after 5s of churn
+oracle server spans: 800
+oracle client spans: 799
+  correctly stitched (same trace AND parent == server span): 58
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    206 [('id10', 'id11'), ('id107', 'id116'), ('id109', 'id119'), ('id111', 'id116'), ('id112', 'id116'), ('id113', 'id116'), ('id114', 'id119'), ('id115', 'id119'), ('id117', 'id119'), ('id12', 'id11')]
+  orphaned (trace matches no oracle server):                 535
+  server with no client span found:                          1
+  duplicate spans per id: srv=0 cli=1
+VERDICT: 58/800 = 7.25% correct; misattributed=206 orphaned=535 (92.62% bad)
+--- java_vt_threads POST-quiesce, 17s+ after churn start (expect empty) ---
+[]
+MIXED-DONE

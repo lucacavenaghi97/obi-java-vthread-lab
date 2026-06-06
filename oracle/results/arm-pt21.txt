@@ -1,0 +1,14 @@
+================ arm=pt21 (VT=false, JRE=eclipse-temurin:21-jre) ================
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+waiting 35s for OBI discovery + java agent injection...
+driving 2000 /oracle requests at concurrency 40...
+oracle server spans: 1998
+oracle client spans: 1993
+  correctly stitched (same trace AND parent == server span): 1991
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          7
+  duplicate spans per id: srv=2 cli=5
+VERDICT: 1991/1998 = 99.65% correct; misattributed=0 orphaned=0 (0.00% bad)
+DONE

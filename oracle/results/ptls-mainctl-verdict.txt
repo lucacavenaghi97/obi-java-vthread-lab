@@ -1,0 +1,15 @@
+ Container vt-e3-oracle-obi-1 Starting 
+ Container vt-e3-oracle-downstream-1 Started 
+ Container vt-e3-oracle-obi-1 Started 
+thread-info: {"thread_name":"http-nio-8080-exec-2","virtual":false}
+waiting 35s for OBI discovery + agent injection...
+driving 400 /oracle-tls requests at P=40 against MAIN-CLEAN...
+oracle server spans: 398
+oracle client spans: 31
+  correctly stitched (same trace AND parent == server span): 21
+  same trace, unexpected parent:                             10
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          367
+  duplicate spans per id: srv=2 cli=0
+VERDICT: 21/398 = 5.28% correct; misattributed=0 orphaned=0 (2.51% bad)

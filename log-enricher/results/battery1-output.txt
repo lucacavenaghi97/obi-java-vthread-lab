@@ -1,0 +1,45 @@
+================ arm=vtmain (VT=true, OBI=main) ================
+thread-info: {"thread_name":"tomcat-handler-1","virtual":true}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 600, oracle log lines: 601
+  enriched with OWN trace (correct):   0
+  enriched with ANOTHER request trace: 112 [('id101', 'id121'), ('id102', 'id123'), ('id103', 'id126'), ('id105', 'id119'), ('id107', 'id136'), ('id113', 'id131'), ('id117', 'id153'), ('id125', 'id154'), ('id128', 'id149'), ('id140', 'id174')]
+  enriched with unknown trace:         0
+  unenriched (no trace_id injected):   488
+  server span without log line:        0
+VERDICT: correct=0.00% wrong-trace=18.67% unenriched=81.33% (of 600)
+================ arm=vtfix (VT=true, OBI=fix) ================
+thread-info: {"virtual":true,"thread_name":"tomcat-handler-1"}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 599, oracle log lines: 601
+  enriched with OWN trace (correct):   1
+  enriched with ANOTHER request trace: 286 [('id1', 'id5'), ('id10', 'id34'), ('id101', 'id123'), ('id103', 'id99'), ('id104', 'id134'), ('id105', 'id128'), ('id109', 'id132'), ('id11', 'id38'), ('id110', 'id130'), ('id111', 'id127')]
+  enriched with unknown trace:         1
+  unenriched (no trace_id injected):   311
+  server span without log line:        0
+VERDICT: correct=0.17% wrong-trace=47.75% unenriched=51.92% (of 599)
+================ arm=ptmain (VT=false, OBI=main) ================
+thread-info: {"thread_name":"http-nio-8080-exec-2","virtual":false}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 598, oracle log lines: 601
+  enriched with OWN trace (correct):   598
+  enriched with ANOTHER request trace: 0 []
+  enriched with unknown trace:         0
+  unenriched (no trace_id injected):   0
+  server span without log line:        0
+VERDICT: correct=100.00% wrong-trace=0.00% unenriched=0.00% (of 598)
+================ arm=ptfix (VT=false, OBI=fix) ================
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+waiting 35s for OBI discovery + agent injection...
+driving 600 /oracle requests at P=40...
+oracle server spans: 600, oracle log lines: 601
+  enriched with OWN trace (correct):   600
+  enriched with ANOTHER request trace: 0 []
+  enriched with unknown trace:         0
+  unenriched (no trace_id injected):   0
+  server span without log line:        0
+VERDICT: correct=100.00% wrong-trace=0.00% unenriched=0.00% (of 600)
+DONE

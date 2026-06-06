@@ -1,0 +1,22 @@
+waiting 35s for injection...
+=== EXPERIMENT A: no-churn pool-handoff baseline (400 /mixed-pt, NO churn) ===
+oracle server spans: 400
+oracle client spans: 399
+  correctly stitched (same trace AND parent == server span): 24
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    88 [('id1', 'id3'), ('id11', 'id12'), ('id110', 'id113'), ('id116', 'id114'), ('id123', 'id125'), ('id127', 'id125'), ('id141', 'id139'), ('id149', 'id152'), ('id166', 'id165'), ('id170', 'id176')]
+  orphaned (trace matches no oracle server):                 287
+  server with no client span found:                          1
+  duplicate spans per id: srv=0 cli=1
+VERDICT: 24/400 = 6.00% correct; misattributed=88 orphaned=287 (93.75% bad)
+=== EXPERIMENT B: dump burst during churn (60 x ~0.3s) ===
+non-empty dumps during churn: 11/60
+sample entry: [{
+        "key": {
+            "tid": 64,
+            "pid": 1,
+            "ns": 4026533059
+        },
+waiting for churn deadline...
+POST-quiesce dump (expect []): []
+DIAG-DONE

@@ -1,0 +1,14 @@
+================ arm=vt25 (VT=true, JRE=eclipse-temurin:25-jre) ================
+thread-info: {"thread_name":"tomcat-handler-1","virtual":true}
+waiting 35s for OBI discovery + java agent injection...
+driving 2000 /oracle requests at concurrency 40...
+oracle server spans: 1993
+oracle client spans: 1994
+  correctly stitched (same trace AND parent == server span): 1986
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 1
+  server with no client span found:                          6
+  duplicate spans per id: srv=7 cli=6
+VERDICT: 1986/1993 = 99.65% correct; misattributed=0 orphaned=1 (0.05% bad)
+DONE

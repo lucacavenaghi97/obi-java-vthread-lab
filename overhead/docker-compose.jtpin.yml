@@ -1,0 +1,8 @@
+# Baseline override: obi-jt-pin = main including the #2260 java_tasks pin
+# but WITHOUT the #2242 fix, so the fix-vs-baseline delta is the #2242 patch
+# alone (see README for the build command). build reset so `up --build`
+# cannot clobber the baseline tag.
+services:
+  obi:
+    image: obi-jt-pin
+    build: !reset null

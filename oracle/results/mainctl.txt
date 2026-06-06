@@ -1,0 +1,24 @@
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+obi image in use: obi-main-clean
+waiting 35s for injection...
+=== CONTROL 1 (pristine main): same-thread /oracle x200 (expected ~clean) ===
+oracle server spans: 199
+oracle client spans: 200
+  correctly stitched (same trace AND parent == server span): 199
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          0
+  duplicate spans per id: srv=1 cli=0
+VERDICT: 199/199 = 100.00% correct; misattributed=0 orphaned=0 (0.00% bad)
+=== CONTROL 2 (pristine main): pool-handoff /mixed-pt x400, NO churn, NO VTs (expected ~94% bad if the bug is upstream) ===
+oracle server spans: 399
+oracle client spans: 400
+  correctly stitched (same trace AND parent == server span): 19
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    63 [('id11', 'id13'), ('id12', 'id6'), ('id127', 'id129'), ('id132', 'id134'), ('id133', 'id134'), ('id139', 'id141'), ('id14', 'id13'), ('id140', 'id141'), ('id143', 'id145'), ('id144', 'id145')]
+  orphaned (trace matches no oracle server):                 317
+  server with no client span found:                          0
+  duplicate spans per id: srv=1 cli=0
+VERDICT: 19/399 = 4.76% correct; misattributed=63 orphaned=317 (95.24% bad)
+MAINCTL-DONE

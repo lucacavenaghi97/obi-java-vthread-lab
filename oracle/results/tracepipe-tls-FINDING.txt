@@ -1,0 +1,1 @@
+10x op=1 (SEND, payload 111B), 0x op=2 (RECV) over 10 requests - agent never reports the response read

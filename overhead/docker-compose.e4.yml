@@ -1,0 +1,8 @@
+# Timed-run override: counter printer (fixed tiny cost,
+# identical shape across arms; also a span-count sanity signal), tunable
+# context propagation mode.
+services:
+  obi:
+    environment:
+      OTEL_EBPF_TRACE_PRINTER: "counter"
+      OTEL_EBPF_BPF_CONTEXT_PROPAGATION: "${CTXPROP:-all}"

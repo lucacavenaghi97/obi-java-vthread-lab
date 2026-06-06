@@ -1,0 +1,48 @@
+# Minimal, self-contained reproduction of the Java virtual-thread trace-correlation gap.
+# Three services: the app under test, a downstream HTTP target, and OBI.
+# OBI prints spans to its own stdout (text printer); no collector/Jaeger needed.
+#
+# Requires OBI_REPO=/path/to/opentelemetry-ebpf-instrumentation: the checkout
+# whose OBI build you want to test (main for the broken baseline, the fix
+# branch for the patched build).
+services:
+  app:
+    build: ./app
+    image: vt-repro-app
+    ports:
+      - "18080:8080"
+    environment:
+      # the single variable that triggers the bug
+      SPRING_THREADS_VIRTUAL_ENABLED: "${VT:-false}"
+
+  downstream:
+    image: nginx:1.27-alpine
+    expose:
+      - "80"
+
+  obi:
+    build:
+      context: ${OBI_REPO:?point OBI_REPO at an opentelemetry-ebpf-instrumentation checkout}
+      dockerfile: internal/test/integration/components/obi/Dockerfile-with-javaagent
+    image: hatest-obi-b
+    privileged: true
+    network_mode: host
+    pid: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    environment:
+      OTEL_EBPF_OPEN_PORT: "8080"
+      OTEL_EBPF_TRACE_PRINTER: "text"
+      OTEL_EBPF_BPF_CONTEXT_PROPAGATION: "all"
+      OTEL_EBPF_DISCOVERY_POLL_INTERVAL: "500ms"
+      OTEL_EBPF_LOG_LEVEL: "info"
+      # diagnostics: ByteBuddy transform listener in the app's stdout
+      # (install-time only, safe; do NOT enable OTEL_EBPF_JAVAAGENT_DEBUG under
+      # virtual threads, its advice-path printlns can deadlock carriers)
+      OTEL_EBPF_JAVAAGENT_DEBUG_INSTRUMENTATION: "${AGENT_DEBUG_BB:-false}"
+      # diagnostics: load the debug BPF programs (bpf_dbg_printk visible
+      # in /sys/kernel/debug/tracing/trace_pipe from the obi container)
+      OTEL_EBPF_BPF_DEBUG: "${BPF_DEBUG:-false}"
+    depends_on:
+      app:
+        condition: service_started

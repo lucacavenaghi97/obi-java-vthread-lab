@@ -1,0 +1,11 @@
+thread-info: {"virtual":true,"thread_name":"tomcat-handler-1"}
+[idle] mounts=3 unmounts=3
+[bench] mounts=128 unmounts=128
+[benchpark] mounts=195 unmounts=195
+[oracle] mounts=235 unmounts=235
+---
+events/request (subtract idle baseline scaled by wall time; idle=10s):
+  bench: 128 mounts / 50 req = 2.56 per req
+  benchpark: 195 mounts / 50 req = 3.90 per req
+  oracle: 235 mounts / 50 req = 4.70 per req
+DONE

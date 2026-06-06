@@ -1,0 +1,14 @@
+HTTPClient(subType=0) 499
+HTTPClient(subType=0) 499
+HTTPClient(subType=0) 499
+thread-info: {"virtual":true,"thread_name":"tomcat-handler-1"}
+driving 1000 /oracle-tls VT + Connection:close (fix image)...
+oracle server spans: 1000
+oracle client spans: 998
+  correctly stitched (same trace AND parent == server span): 998
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          2
+  duplicate spans per id: srv=0 cli=1
+VERDICT: 998/1000 = 99.80% correct; misattributed=0 orphaned=0 (0.00% bad)

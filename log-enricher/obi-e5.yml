@@ -1,0 +1,7 @@
+ebpf:
+  log_enricher:
+    services:
+      - service:
+        - open_ports: "8080"
+discovery:
+  min_process_age: "0s"

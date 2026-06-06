@@ -1,0 +1,10 @@
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+driving 300 /oracle-tls with Connection:close downstream (fix image)...
+oracle server spans: 300
+oracle client spans: 300
+  correctly stitched (same trace AND parent == server span): 300
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          0
+VERDICT: 300/300 = 100.00% correct; misattributed=0 orphaned=0 (0.00% bad)

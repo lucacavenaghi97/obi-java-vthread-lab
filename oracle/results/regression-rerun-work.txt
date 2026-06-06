@@ -1,0 +1,19 @@
+================ VT=false ================
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+waiting 35s for OBI discovery + java agent injection...
+carrier migration (from app): 0/400
+server spans (/work): 401
+client spans:         401
+  correctly nested:   401
+  orphaned:           0
+  broken correlation: 0/401 = 0.0%
+================ VT=true ================
+thread-info: {"virtual":true,"thread_name":"tomcat-handler-1"}
+waiting 35s for OBI discovery + java agent injection...
+carrier migration (from app): 368/400
+server spans (/work): 400
+client spans:         401
+  correctly nested:   400
+  orphaned:           1
+  broken correlation: 1/401 = 0.2%
+DONE

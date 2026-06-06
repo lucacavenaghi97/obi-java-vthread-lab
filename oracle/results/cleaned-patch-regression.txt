@@ -1,0 +1,25 @@
+================ arm=vt21 (VT=true, JRE=eclipse-temurin:21-jre, endpoint=oracle, ssl_server=false) ================
+thread-info: {"thread_name":"tomcat-handler-1","virtual":true}
+waiting 35s for OBI discovery + java agent injection...
+driving 800 /oracle requests at concurrency 40...
+oracle server spans: 800
+oracle client spans: 800
+  correctly stitched (same trace AND parent == server span): 800
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          0
+VERDICT: 800/800 = 100.00% correct; misattributed=0 orphaned=0 (0.00% bad)
+================ arm=pt21 (VT=false, JRE=eclipse-temurin:21-jre, endpoint=oracle, ssl_server=false) ================
+thread-info: {"virtual":false,"thread_name":"http-nio-8080-exec-2"}
+waiting 35s for OBI discovery + java agent injection...
+driving 800 /oracle requests at concurrency 40...
+oracle server spans: 800
+oracle client spans: 800
+  correctly stitched (same trace AND parent == server span): 800
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          0
+VERDICT: 800/800 = 100.00% correct; misattributed=0 orphaned=0 (0.00% bad)
+DONE

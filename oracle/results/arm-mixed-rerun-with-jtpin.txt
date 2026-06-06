@@ -1,0 +1,16 @@
+6
+waiting 35s for injection...
+churn: {"seconds":60,"churning":64}
+=== MIXED RERUN (VT fix + java_tasks pin): 800 /mixed-pt under shared-carrier churn ===
+oracle server spans: 799
+oracle client spans: 800
+  correctly stitched (same trace AND parent == server span): 799
+  same trace, unexpected parent:                             0
+  CROSS-WIRED to another request's trace:                    0 []
+  orphaned (trace matches no oracle server):                 0
+  server with no client span found:                          0
+  duplicate spans per id: srv=1 cli=0
+VERDICT: 799/799 = 100.00% correct; misattributed=0 orphaned=0 (0.00% bad)
+waiting for churn deadline...
+POST-quiesce map dump (expect []): []
+MIXED2-DONE

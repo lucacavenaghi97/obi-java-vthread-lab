@@ -1,0 +1,9 @@
+# Non-Java tax arm: OBI watches nginx (no Java app at all); the translate
+# lookup runs as a miss on an empty map, which is what non-Java users pay.
+services:
+  downstream:
+    ports:
+      - "18088:80"
+  obi:
+    environment:
+      OTEL_EBPF_OPEN_PORT: "80"
