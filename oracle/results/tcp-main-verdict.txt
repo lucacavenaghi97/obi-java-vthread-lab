@@ -1,0 +1,8 @@
+raw-TCP driven OK: 800
+  client span found:            799
+  correct (own trace, parented): 276
+  CROSS-WIRED (shared trace):    254 ['tcpmainid1', 'tcpmainid10', 'tcpmainid100', 'tcpmainid101', 'tcpmainid105', 'tcpmainid106']
+  orphaned (zero parent):        269 ['tcpmainid44', 'tcpmainid45', 'tcpmainid47', 'tcpmainid49', 'tcpmainid50', 'tcpmainid53']
+  multi-trace ids:               0
+  missing client span:           1
+VERDICT tcp: 276/799 = 34.54% correct

@@ -1,15 +1,22 @@
 package repro;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -251,5 +258,51 @@ public class Application {
         }
         conn.disconnect();
         return code;
+    }
+
+    // Raw TCP oracle (tcp arms in ../oracle): a non-HTTP line protocol so OBI
+    // takes the generic-TCP keying path. Per connection: read "id\n", call the
+    // downstream for that id, reply "ok id status\n". Handler threads follow
+    // SPRING_THREADS_VIRTUAL_ENABLED, virtual-thread-per-connection when true.
+    @Bean
+    CommandLineRunner rawTcpServer() {
+        return args -> {
+            boolean vt = "true".equalsIgnoreCase(System.getenv("SPRING_THREADS_VIRTUAL_ENABLED"));
+            ServerSocket server = new ServerSocket(9090);
+            Thread acceptor = new Thread(() -> {
+                while (true) {
+                    try {
+                        Socket sock = server.accept();
+                        Runnable handler = () -> handleRawTcp(sock);
+                        if (vt) {
+                            Thread.ofVirtual().start(handler);
+                        } else {
+                            new Thread(handler).start();
+                        }
+                    } catch (Exception e) {
+                        return;
+                    }
+                }
+            }, "raw-tcp-acceptor");
+            acceptor.setDaemon(true);
+            acceptor.start();
+        };
+    }
+
+    private static void handleRawTcp(Socket sock) {
+        try (sock) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            String id = in.readLine();
+            if (id == null) {
+                return;
+            }
+            Thread.sleep(20);
+            int code = httpGet("http://downstream/echo/" + id);
+            OutputStream out = sock.getOutputStream();
+            out.write(("ok " + id + " " + code + "\n").getBytes());
+            out.flush();
+        } catch (Exception e) {
+            // connection-scoped
+        }
     }
 }

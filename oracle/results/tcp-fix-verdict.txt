@@ -1,0 +1,9 @@
+raw-TCP driven OK: 800
+  client span found:            800
+  correct (own trace, parented): 800
+  CROSS-WIRED (shared trace):    0 []
+  orphaned (zero parent):        0 []
+  multi-trace ids:               0
+  missing client span:           0
+VERDICT tcp: 800/800 = 100.00% correct
+server_traces post-quiesce: 0

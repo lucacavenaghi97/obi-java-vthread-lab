@@ -1,0 +1,6 @@
+DNS spans for downstream.: 22 (oracle traces: 120)
+  joined an oracle trace:        7
+  parented to ITS server span:   7
+  orphaned (zero parent):        15
+  foreign/unmatched trace:       15
+VERDICT dns: 7/22 = 31.82% correctly parented

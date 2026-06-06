@@ -11,6 +11,7 @@ services:
     image: vt-oracle-app
     ports:
       - "18080:8080"
+      - "19090:9090"
     volumes:
       - ./tls:/certs:ro
     environment:
@@ -18,7 +19,7 @@ services:
       # for the mixed arm's custom VT scheduler (JDK-internal field); harmless
       # in the other arms. Must be the single-token = form: JAVA_TOOL_OPTIONS
       # splits on whitespace and the JVM rejects a bare --add-opens token.
-      JAVA_TOOL_OPTIONS: "--add-opens=java.base/java.lang=ALL-UNNAMED"
+      JAVA_TOOL_OPTIONS: "--add-opens=java.base/java.lang=ALL-UNNAMED${EXTRA_JAVA_OPTS:-}"
       # tlss arm only: Tomcat serves HTTPS on 8080 (SSLEngine path in the
       # java agent). Spring relaxed binding: server.ssl.*
       SERVER_SSL_ENABLED: "${SSL_SERVER:-false}"

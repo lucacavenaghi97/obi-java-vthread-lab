@@ -179,3 +179,36 @@ Reading:
 3. **No evidence of fix-induced breakage on TLS**: fix arms match the main
    control within noise in the keep-alive runs, and the close runs are clean
    on both PT and VT.
+
+## Raw-TCP and DNS arms (post-review validation)
+
+A line-by-line review of the patch flagged two keying surfaces the plain
+arms never exercise: the generic-TCP server path (store via the shared
+trace_lifecycle code, delete in cleanup_trace_info at tcp_close time) and
+the DNS client path (key captured at tcp_connect into sock_pids, consumed
+in softirq context where the current task is meaningless). Both fixes
+capture the translated tid at request/connect time; these arms validate
+them end to end.
+
+- Raw TCP: the reproducer runs a 9090 line-protocol server
+  (virtual-thread-per-connection when SPRING_THREADS_VIRTUAL_ENABLED is
+  true). OBI exports no span for unknown protocols, but the kernel-side
+  server context is created and the downstream /echo/{id} client span
+  inherits it, so per-id trace distinctness (cross-wire detector) plus
+  nonzero parents validate the keying; bpftool dumps server_traces
+  post-quiesce to prove delete symmetry (must be empty). driver_tcp.py +
+  analyze_tcpdns.py tcp.
+- DNS: the JVM caches lookups and -Dsun.net.inetaddr.ttl=0 was not
+  honored on JDK 21, so driver_dns_burst.sh samples one fresh resolve per
+  31 s burst (default positive TTL is 30 s); each resolution runs on a
+  different request's virtual thread. analyze_tcpdns.py dns checks that
+  every DNS span joins an /oracle request trace and is parented to that
+  request's server span.
+
+| arm | fix | main baseline |
+|---|---|---|
+| raw TCP, 800 req @ P40, VT | 800/800 = 100%, server_traces empty post-quiesce | 276/799 = 34.5% (254 cross-wired, 269 orphaned) |
+| DNS resolutions on VTs | 24/24 = 100% parented | 7/22 = 31.8% (15 orphaned) |
+
+Raw outputs in results/ (tcp-*, dns-*). Runner: run_tcpdns_arms.sh (the
+DNS rows above were sampled with driver_dns_burst.sh on each build).
