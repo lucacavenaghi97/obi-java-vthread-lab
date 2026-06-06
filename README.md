@@ -76,10 +76,16 @@ suppresses the writes (0% wrong, platform untouched). Numbers in
   fixed by
   [#2260](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/pull/2260).
 - Blocking-SSLSocket read path: client spans lost on keep-alive TLS
-  connections (~92% missing) and responses never parsed, platform threads
-  included, VT-independent. Root cause identified (read-side advice fails
-  on a classloader visibility issue); to be filed upstream with a fix.
-  Evidence in `oracle/results/`.
+  connections (~94% missing) and responses never parsed, platform threads
+  included, VT-independent: the read-side advices are inlined into a
+  bootstrap-classloader class but called a helper that is not
+  bootstrap-injected, dying on a silently swallowed NoClassDefFoundError.
+  Filed as
+  [#2262](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/issues/2262),
+  fixed by
+  [#2263](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/pull/2263)
+  (keep-alive arm goes from 24/398 captured, all status 499, to 388/400,
+  all status 200). Evidence in `oracle/results/`.
 
 ## Reproducing
 
